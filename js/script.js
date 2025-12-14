@@ -178,7 +178,8 @@ function formatDate(year, month, day) {
 function animateNumber(element, target, duration = 1500) {
     const start = 0;
     const startTime = performance.now();
-    
+    let confettiTriggered = false;
+
     function update(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
@@ -189,11 +190,14 @@ function animateNumber(element, target, duration = 1500) {
         
         element.textContent = current;
         
+        // Trigger confetti early (at 40% through animation)
+        if (!confettiTriggered && progress >= 0.4 && target > 0) {
+            confettiTriggered = true;
+            triggerConfetti();
+        }
+        
         if (progress < 1) {
             requestAnimationFrame(update);
-        } else if (target > 0) {
-            // Trigger confetti when animation completes (only if score > 0)
-            triggerConfetti();
         }
     }
     
@@ -459,7 +463,7 @@ function triggerConfetti() {
     }
     
     let startTime = performance.now();
-    const duration = 500;
+    const duration = 1000;
     
     function animate(currentTime) {
         const elapsed = currentTime - startTime;
