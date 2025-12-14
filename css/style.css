@@ -330,6 +330,13 @@ main {
     color: var(--gray);
 }
 
+.explanation-subhead {
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 4px;
+    color: var(--dark);
+}
+
 /* Primary Button */
 .btn-primary {
     width: 100%;
