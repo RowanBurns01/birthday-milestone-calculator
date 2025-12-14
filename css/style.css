@@ -132,7 +132,7 @@ main {
     border: 1px solid var(--gray-light);
     font-size: 0.8125rem;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
     user-select: none;
 }
 
@@ -144,6 +144,11 @@ main {
 
 .checkbox-item label:hover {
     border-color: var(--gray-dark);
+    transform: translateY(-1px);
+}
+
+.checkbox-item label:active {
+    transform: translateY(0);
 }
 
 /* Removable milestone */
@@ -166,7 +171,7 @@ main {
     line-height: 1;
     color: var(--gray);
     opacity: 0;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.2s ease;
     z-index: 1;
 }
 
@@ -192,7 +197,7 @@ main {
     font-size: 0.75rem;
     cursor: pointer;
     padding: 4px 0;
-    transition: color 0.15s ease;
+    transition: color 0.2s ease;
 }
 
 .btn-text:hover {
@@ -220,6 +225,7 @@ main {
     font-size: 0.875rem;
     background: var(--white);
     min-width: 0;
+    transition: border-color 0.2s ease;
 }
 
 .add-milestone input:focus {
@@ -237,7 +243,7 @@ main {
     border: 1px solid var(--dark);
     font-size: 0.8125rem;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
 }
 
 .btn-secondary:hover {
@@ -253,7 +259,7 @@ main {
     border: 1px solid var(--gray-light);
     background: var(--white);
     color: var(--dark);
-    transition: border-color 0.15s ease;
+    transition: border-color 0.2s ease;
     -webkit-appearance: none;
     appearance: none;
 }
@@ -275,11 +281,16 @@ main {
     background: var(--black);
     border: none;
     cursor: pointer;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .btn-primary:hover {
     opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
 }
 
 /* Results Section */
@@ -359,6 +370,40 @@ main {
     color: var(--gray-light);
 }
 
+/* Share Button */
+.btn-share {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.8125rem;
+    background: var(--white);
+    border: 1px solid var(--gray-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--gray-dark);
+}
+
+.btn-share:hover {
+    border-color: var(--dark);
+    color: var(--dark);
+}
+
+.share-feedback {
+    display: block;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--gray);
+    height: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    opacity: 0;
+}
+
+.share-feedback.show {
+    height: 20px;
+    opacity: 1;
+    margin-top: -8px;
+}
+
 /* Party Milestones */
 .party-milestones-card {
     border-width: 2px;
@@ -375,6 +420,7 @@ main {
     justify-content: space-between;
     align-items: center;
     font-size: 0.9375rem;
+    transition: background-color 0.2s ease;
 }
 
 #party-milestones-list li:last-child, #full-calendar-list li:last-child {
@@ -384,6 +430,25 @@ main {
 
 #party-milestones-list li:first-child, #full-calendar-list li:first-child {
     padding-top: 0;
+}
+
+/* Best milestone highlight */
+#full-calendar-list li.best-milestone {
+    background: var(--off-white);
+    margin: 0 -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+}
+
+#full-calendar-list li.best-milestone::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--black);
 }
 
 .milestone-age {
@@ -400,6 +465,12 @@ main {
     font-size: 0.8125rem;
     padding: 4px 10px;
     border: 1px solid var(--gray-lighter);
+    transition: transform 0.2s ease;
+}
+
+#party-milestones-list li:hover .milestone-day,
+#full-calendar-list li:hover .milestone-day {
+    transform: scale(1.05);
 }
 
 .day-friday, .day-saturday {
@@ -437,6 +508,60 @@ main {
     color: var(--gray-dark);
     font-size: 0.875rem;
     line-height: 1.6;
+}
+
+/* Explanation Dropdown */
+.explanation-dropdown {
+    border: 1px solid var(--gray-lighter);
+    font-size: 0.8125rem;
+}
+
+.explanation-dropdown summary {
+    padding: 14px 20px;
+    cursor: pointer;
+    color: var(--gray);
+    transition: color 0.2s ease;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.explanation-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.explanation-dropdown summary::after {
+    content: '+';
+    font-size: 1rem;
+    font-weight: 300;
+    transition: transform 0.2s ease;
+}
+
+.explanation-dropdown[open] summary::after {
+    transform: rotate(45deg);
+}
+
+.explanation-dropdown summary:hover {
+    color: var(--dark);
+}
+
+.explanation-content {
+    padding: 0 20px 16px;
+    color: var(--gray-dark);
+    line-height: 1.6;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Footer */

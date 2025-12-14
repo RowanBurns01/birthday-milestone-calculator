@@ -13,10 +13,14 @@ const MONTHS = [
     'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
+// Significant milestones for "best" highlighting
+const SIGNIFICANT_MILESTONES = [18, 21, 30, 40, 50];
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     renderCheckboxes();
     setupEventListeners();
+    loadFromURL();
 });
 
 // Render all milestone checkboxes
@@ -24,7 +28,6 @@ function renderCheckboxes() {
     const container = document.getElementById('milestones-checkboxes');
     container.innerHTML = '';
     
-    // Sort milestones numerically
     milestones.sort((a, b) => a - b);
     
     milestones.forEach(age => {
@@ -40,7 +43,6 @@ function renderCheckboxes() {
             <label for="milestone-${age}">${age}${suffix}</label>
         `;
         
-        // Add remove button for custom milestones
         if (!isDefault) {
             html += `<button type="button" class="remove-milestone" data-age="${age}">×</button>`;
         }
@@ -63,27 +65,56 @@ function setupEventListeners() {
     document.getElementById('select-all').addEventListener('click', () => toggleAllCheckboxes(true));
     document.getElementById('select-none').addEventListener('click', () => toggleAllCheckboxes(false));
     document.getElementById('add-milestone-btn').addEventListener('click', addMilestone);
+    document.getElementById('share-btn').addEventListener('click', shareResults);
     
-    // Add milestone on Enter key
     document.getElementById('new-milestone-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             addMilestone();
         }
     });
     
-    // Calculate on Enter key in date input
     document.getElementById('birthday-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             calculateBirthday();
         }
     });
     
-    // Event delegation for remove buttons
     document.getElementById('milestones-checkboxes').addEventListener('click', (e) => {
         if (e.target.classList.contains('remove-milestone')) {
             const age = parseInt(e.target.dataset.age);
             removeMilestone(age);
         }
+    });
+}
+
+// Load birthday from URL if present
+function loadFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const birthday = params.get('b');
+    
+    if (birthday) {
+        document.getElementById('birthday-input').value = birthday;
+        setTimeout(() => calculateBirthday(), 100);
+    }
+}
+
+// Share results by copying URL
+function shareResults() {
+    const birthday = document.getElementById('birthday-input').value;
+    if (!birthday) return;
+    
+    const url = `${window.location.origin}${window.location.pathname}?b=${birthday}`;
+    
+    navigator.clipboard.writeText(url).then(() => {
+        const feedback = document.getElementById('share-feedback');
+        feedback.textContent = 'Link copied to clipboard';
+        feedback.classList.add('show');
+        setTimeout(() => {
+            feedback.classList.remove('show');
+        }, 2000);
+    }).catch(() => {
+        // Fallback for older browsers
+        prompt('Copy this link:', url);
     });
 }
 
@@ -146,6 +177,29 @@ function formatDate(year, month, day) {
     return `${monthName} ${day}${suffix}, ${year}`;
 }
 
+// Animate number counting up
+function animateNumber(element, target, duration = 600) {
+    const start = 0;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Ease out cubic
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (target - start) * easeProgress);
+        
+        element.textContent = current;
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+
 // Main calculation function
 function calculateBirthday() {
     const input = document.getElementById('birthday-input').value;
@@ -180,20 +234,29 @@ function calculateBirthday() {
             year: milestoneYear,
             dayOfWeek,
             dayName: DAYS[dayOfWeek],
-            isPartyDay: dayOfWeek === 5 || dayOfWeek === 6
+            isPartyDay: dayOfWeek === 5 || dayOfWeek === 6,
+            isSignificant: SIGNIFICANT_MILESTONES.includes(age)
         };
     });
     
     const partyMilestones = milestoneData.filter(m => m.isPartyDay);
     const partyCount = partyMilestones.length;
     
+    // Find the "best" milestone (most significant that lands on party day)
+    const bestMilestone = partyMilestones
+        .filter(m => m.isSignificant)
+        .sort((a, b) => SIGNIFICANT_MILESTONES.indexOf(a.age) - SIGNIFICANT_MILESTONES.indexOf(b.age))[0]
+        || partyMilestones[0];
+    
     displayResults({
         birthDate: formatDate(year, month, day),
         birthDayName,
+        birthDayOfWeek,
         milestoneData,
         partyMilestones,
         partyCount,
-        totalMilestones: selectedMilestones.length
+        totalMilestones: selectedMilestones.length,
+        bestMilestone
     });
 }
 
@@ -214,8 +277,9 @@ function displayResults(data) {
     
     displayScoreCard(data.partyCount, data.totalMilestones);
     displayPartyMilestones(data.partyMilestones);
-    displayFullCalendar(data.milestoneData);
+    displayFullCalendar(data.milestoneData, data.bestMilestone);
     displaySummary(data);
+    displayExplanation(data);
     
     resultsSection.style.display = 'flex';
     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -228,7 +292,9 @@ function displayScoreCard(partyCount, totalMilestones) {
     const scoreText = document.getElementById('score-text');
     
     scoreCard.className = 'card score-card';
-    scoreNumber.textContent = partyCount;
+    
+    // Animate the number
+    animateNumber(scoreNumber, partyCount);
     
     let message, scoreClass;
     
@@ -279,7 +345,7 @@ function displayPartyMilestones(partyMilestones) {
 }
 
 // Display full calendar
-function displayFullCalendar(milestoneData) {
+function displayFullCalendar(milestoneData, bestMilestone) {
     const list = document.getElementById('full-calendar-list');
     list.innerHTML = '';
     
@@ -287,6 +353,11 @@ function displayFullCalendar(milestoneData) {
         const li = document.createElement('li');
         const dayClass = m.isPartyDay ? `day-${m.dayName.toLowerCase()}` : 
                         (m.dayOfWeek === 0 ? 'day-sunday' : 'day-weekday');
+        
+        // Highlight best milestone
+        if (bestMilestone && m.age === bestMilestone.age) {
+            li.classList.add('best-milestone');
+        }
         
         li.innerHTML = `
             <span>
@@ -338,4 +409,13 @@ function displaySummary(data) {
     }
     
     summaryText.textContent = summary;
+}
+
+// Display the clump explanation
+function displayExplanation(data) {
+    const content = document.getElementById('explanation-content');
+    
+    const explanation = `Each year, your birthday shifts forward by one day of the week (two days after a leap year). This creates predictable "clumps" of milestones that land on similar days. For someone born on a ${data.birthDayName}, certain milestone groups tend to cluster together. That's why your 1st, 18th, and 80th birthdays often land on adjacent days, while your 21st, 60th, and 100th form another cluster.`;
+    
+    content.textContent = explanation;
 }
