@@ -190,8 +190,8 @@ function animateNumber(element, target, duration = 1500) {
         
         element.textContent = current;
         
-        // Trigger confetti early (at 40% through animation)
-        if (!confettiTriggered && progress >= 0.4 && target > 0) {
+        // Trigger confetti at 60% through animation
+        if (!confettiTriggered && progress >= 0.6 && target > 0) {
             confettiTriggered = true;
             triggerConfetti();
         }
