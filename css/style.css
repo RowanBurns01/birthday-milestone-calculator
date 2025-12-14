@@ -1,4 +1,5 @@
-/* CSS Reset & Base Styles */
+/* Minimalist Monochrome Theme */
+
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -6,62 +7,65 @@
 }
 
 :root {
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
-    --success-color: #10b981;
-    --warning-color: #f59e0b;
-    --danger-color: #ef4444;
-    --bg-color: #f8fafc;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
+    --black: #000000;
+    --dark: #1a1a1a;
+    --gray-dark: #444444;
+    --gray: #888888;
+    --gray-light: #cccccc;
+    --gray-lighter: #e8e8e8;
+    --off-white: #f5f5f5;
+    --white: #ffffff;
+    --accent: #000000;
+    --radius: 2px;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: var(--bg-color);
-    color: var(--text-primary);
-    line-height: 1.6;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    line-height: 1.5;
     min-height: 100vh;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
 }
 
 .container {
-    max-width: 480px;
+    width: 100%;
+    max-width: 400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 24px 20px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* Header Styles */
+/* Typography */
+h1, h2, h3 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+/* Header */
 header {
     text-align: center;
-    padding: 24px 0 32px;
+    padding: 20px 0 32px;
+    border-bottom: 1px solid var(--gray-lighter);
+    margin-bottom: 32px;
 }
 
 header h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text-primary);
+    font-size: 1.25rem;
     margin-bottom: 8px;
 }
 
 .subtitle {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    max-width: 300px;
+    font-size: 0.875rem;
+    color: var(--gray);
+    max-width: 280px;
     margin: 0 auto;
 }
 
-/* Main Content */
+/* Main */
 main {
     flex: 1;
 }
@@ -70,33 +74,42 @@ main {
 .input-section {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
 }
 
-.milestones-group, .birthday-group {
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
+/* Cards */
+.card {
+    border: 1px solid var(--gray-lighter);
     padding: 20px;
-    box-shadow: var(--shadow-md);
 }
 
-.milestones-group h2, .birthday-group h2 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 8px;
+.card h2 {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+    color: var(--dark);
+}
+
+.card h3 {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    color: var(--dark);
 }
 
 .helper-text {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    color: var(--gray);
     margin-bottom: 16px;
 }
 
 /* Checkboxes Grid */
 .checkboxes-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .checkbox-item {
@@ -113,102 +126,177 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 8px;
-    background: var(--bg-color);
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    font-weight: 500;
+    min-width: 48px;
+    padding: 8px 12px;
+    background: var(--white);
+    border: 1px solid var(--gray-light);
+    font-size: 0.8125rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     user-select: none;
 }
 
 .checkbox-item input[type="checkbox"]:checked + label {
-    background: var(--primary-color);
-    border-color: var(--primary-color);
-    color: white;
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
 }
 
 .checkbox-item label:hover {
-    border-color: var(--primary-color);
+    border-color: var(--gray-dark);
+}
+
+/* Removable milestone */
+.checkbox-item.removable label {
+    padding-right: 28px;
+    position: relative;
+}
+
+.checkbox-item .remove-milestone {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--gray);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 1;
+}
+
+.checkbox-item.removable:hover .remove-milestone {
+    opacity: 1;
+}
+
+.checkbox-item input[type="checkbox"]:checked ~ .remove-milestone {
+    color: var(--gray-light);
 }
 
 .checkbox-actions {
     display: flex;
-    gap: 16px;
+    gap: 8px;
     margin-top: 12px;
-    justify-content: center;
+    align-items: center;
 }
 
-.btn-link {
+.btn-text {
     background: none;
     border: none;
-    color: var(--primary-color);
-    font-size: 0.875rem;
+    color: var(--gray);
+    font-size: 0.75rem;
     cursor: pointer;
-    text-decoration: underline;
-    padding: 4px;
+    padding: 4px 0;
+    transition: color 0.15s ease;
 }
 
-.btn-link:hover {
-    color: var(--primary-hover);
+.btn-text:hover {
+    color: var(--dark);
+}
+
+.divider {
+    color: var(--gray-light);
+    font-size: 0.75rem;
+}
+
+/* Add Milestone */
+.add-milestone {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--gray-lighter);
+}
+
+.add-milestone input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--gray-light);
+    font-size: 0.875rem;
+    background: var(--white);
+    min-width: 0;
+}
+
+.add-milestone input:focus {
+    outline: none;
+    border-color: var(--dark);
+}
+
+.add-milestone input::placeholder {
+    color: var(--gray);
+}
+
+.btn-secondary {
+    padding: 8px 16px;
+    background: var(--white);
+    border: 1px solid var(--dark);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--dark);
+    color: var(--white);
 }
 
 /* Date Input */
 .date-input {
     width: 100%;
-    padding: 14px 16px;
+    padding: 12px;
     font-size: 1rem;
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    background: var(--bg-color);
-    color: var(--text-primary);
-    transition: border-color 0.2s ease;
+    border: 1px solid var(--gray-light);
+    background: var(--white);
+    color: var(--dark);
+    transition: border-color 0.15s ease;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .date-input:focus {
     outline: none;
-    border-color: var(--primary-color);
+    border-color: var(--dark);
 }
 
 /* Primary Button */
 .btn-primary {
     width: 100%;
-    padding: 16px 24px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: white;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    padding: 14px 24px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    background: var(--black);
     border: none;
-    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: var(--shadow-md);
+    transition: opacity 0.15s ease;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
+    opacity: 0.85;
 }
 
 /* Results Section */
 .results-section {
     margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--gray-lighter);
     display: flex;
     flex-direction: column;
     gap: 16px;
-    animation: fadeIn 0.4s ease;
+    animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -216,81 +304,64 @@ main {
     }
 }
 
-.result-card {
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    box-shadow: var(--shadow-md);
-}
-
-.result-card h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
 /* Birth Day Card */
 .birth-day-card {
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 0.9375rem;
 }
 
 .birth-day-card .day-highlight {
-    font-weight: 700;
-    color: var(--primary-color);
+    font-weight: 600;
 }
 
-/* Score Card - Dynamic colors */
+/* Score Card */
 .score-card {
     text-align: center;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
-
-.score-card.score-amazing {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-}
-
-.score-card.score-great {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    color: white;
-}
-
-.score-card.score-good {
-    background: linear-gradient(135deg, #84cc16, #65a30d);
-    color: white;
-}
-
-.score-card.score-okay {
-    background: linear-gradient(135deg, #eab308, #ca8a04);
-    color: white;
-}
-
-.score-card.score-poor {
-    background: linear-gradient(135deg, #f97316, #ea580c);
-    color: white;
-}
-
-.score-card.score-unlucky {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    color: white;
+    padding: 32px 20px;
 }
 
 .score-number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    display: block;
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
     margin-bottom: 4px;
 }
 
-/* Party Milestones Card */
-.party-milestones-card {
-    border: 2px solid var(--success-color);
+.score-card p {
+    font-size: 0.875rem;
+    color: var(--gray);
 }
 
-.party-milestones-card h3 {
-    color: var(--success-color);
+.score-card.score-great {
+    background: var(--black);
+    color: var(--white);
+}
+
+.score-card.score-great p {
+    color: var(--gray-light);
+}
+
+.score-card.score-good {
+    background: var(--dark);
+    color: var(--white);
+}
+
+.score-card.score-good p {
+    color: var(--gray-light);
+}
+
+.score-card.score-okay {
+    background: var(--gray-dark);
+    color: var(--white);
+}
+
+.score-card.score-okay p {
+    color: var(--gray-light);
+}
+
+/* Party Milestones */
+.party-milestones-card {
+    border-width: 2px;
 }
 
 #party-milestones-list, #full-calendar-list {
@@ -298,95 +369,97 @@ main {
 }
 
 #party-milestones-list li, #full-calendar-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border-color);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-lighter);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 0.9375rem;
 }
 
 #party-milestones-list li:last-child, #full-calendar-list li:last-child {
     border-bottom: none;
+    padding-bottom: 0;
+}
+
+#party-milestones-list li:first-child, #full-calendar-list li:first-child {
+    padding-top: 0;
 }
 
 .milestone-age {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .milestone-year {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
+    color: var(--gray);
+    font-size: 0.8125rem;
+    margin-left: 6px;
 }
 
 .milestone-day {
-    font-weight: 500;
+    font-size: 0.8125rem;
     padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.875rem;
+    border: 1px solid var(--gray-lighter);
 }
 
 .day-friday, .day-saturday {
-    background: var(--success-color);
-    color: white;
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
 }
 
 .day-sunday {
-    background: #8b5cf6;
-    color: white;
+    background: var(--gray-dark);
+    border-color: var(--gray-dark);
+    color: var(--white);
 }
 
 .day-weekday {
-    background: var(--bg-color);
-    color: var(--text-secondary);
-}
-
-/* Summary Card */
-.summary-card {
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-}
-
-#summary-text {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.7;
+    background: var(--white);
+    color: var(--gray);
 }
 
 /* No Party Milestones */
 .no-party-milestones {
     text-align: center;
-    color: var(--text-secondary);
-    padding: 20px 0;
+    color: var(--gray);
+    padding: 16px 0;
+    font-size: 0.875rem;
+}
+
+/* Summary Card */
+.summary-card {
+    background: var(--off-white);
+    border-color: var(--off-white);
+}
+
+#summary-text {
+    color: var(--gray-dark);
+    font-size: 0.875rem;
+    line-height: 1.6;
 }
 
 /* Footer */
 footer {
     text-align: center;
-    padding: 32px 0 16px;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
+    padding: 32px 0 8px;
+    color: var(--gray);
+    font-size: 0.75rem;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 380px) {
-    .checkboxes-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    header h1 {
-        font-size: 1.5rem;
-    }
-}
-
-@media (min-width: 481px) {
+/* Responsive */
+@media (max-width: 360px) {
     .container {
-        padding: 32px;
-    }
-    
-    header {
-        padding: 32px 0 40px;
+        padding: 20px 16px;
     }
     
     header h1 {
-        font-size: 2rem;
+        font-size: 1.125rem;
+    }
+    
+    .checkbox-item label {
+        min-width: 44px;
+        padding: 6px 10px;
+        font-size: 0.75rem;
     }
 }
