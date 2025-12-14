@@ -254,7 +254,7 @@ main {
 /* Date Input */
 .date-input {
     width: 100%;
-    padding: 12px;
+    padding: 16px 12px;
     font-size: 1rem;
     border: 1px solid var(--gray-light);
     background: var(--white);
@@ -262,11 +262,28 @@ main {
     transition: border-color 0.2s ease;
     -webkit-appearance: none;
     appearance: none;
+    min-height: 54px;
 }
 
 .date-input:focus {
     outline: none;
     border-color: var(--dark);
+}
+
+/* Placeholder styling for date input */
+.date-input:not(:valid) {
+    color: var(--gray);
+}
+
+.input-hint {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 8px;
+    text-align: center;
+}
+
+.date-input:valid + .input-hint {
+    display: none;
 }
 
 /* Primary Button */

@@ -449,17 +449,17 @@ function triggerConfetti() {
         particles.push({
             x: originX,
             y: originY,
-            vx: Math.cos(angle) * velocity,
-            vy: Math.sin(angle) * velocity - 3,
+            vx: Math.cos(angle) * velocity * 1.2,
+            vy: Math.sin(angle) * velocity * 1.2 - 4,
             radius: 2 + Math.random() * 3,
             color: Math.random() > 0.5 ? '#000000' : '#aaaaaa',
             alpha: 1,
-            gravity: 0.12
+            gravity: 0.18
         });
     }
     
     let startTime = performance.now();
-    const duration = 1500;
+    const duration = 1000;
     
     function animate(currentTime) {
         const elapsed = currentTime - startTime;
@@ -471,7 +471,7 @@ function triggerConfetti() {
             p.vy += p.gravity;
             p.x += p.vx;
             p.y += p.vy;
-            p.alpha = Math.max(0, 1 - progress * 1.2);
+            p.alpha = Math.max(0, 1 - progress * 1.3);
             
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
