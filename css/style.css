@@ -409,8 +409,8 @@ main {
 }
 
 .day-sunday {
-    background: var(--gray-dark);
-    border-color: var(--gray-dark);
+    background: var(--gray);
+    border-color: var(--gray);
     color: var(--white);
 }
 
