@@ -191,6 +191,9 @@ function animateNumber(element, target, duration = 1500) {
         
         if (progress < 1) {
             requestAnimationFrame(update);
+        } else if (target > 0) {
+            // Trigger confetti when animation completes (only if score > 0)
+            triggerConfetti();
         }
     }
     
@@ -402,5 +405,90 @@ function displayExplanation(data) {
     const explanation = `Each year, your birthday shifts forward by one day of the week (two days after a leap year). This creates predictable "clumps" of milestones that land on similar days. For someone born on a ${data.birthDayName}, certain milestone groups tend to cluster together. That's why your 1st, 18th, and 80th birthdays often land on adjacent days, while your 21st, 60th, and 100th form another cluster.`;
     
     content.textContent = explanation;
+}
+
+// ============================================
+// CONFETTI EFFECT
+// ============================================
+
+// Create canvas for confetti
+function createConfettiCanvas() {
+    let canvas = document.querySelector('.confetti-canvas');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.className = 'confetti-canvas';
+        document.body.appendChild(canvas);
+    }
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    return canvas;
+}
+
+// Monochrome particle burst confetti
+function triggerConfetti() {
+    const canvas = createConfettiCanvas();
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    const particleCount = 35;
+    
+    // Get score card position
+    const scoreCard = document.getElementById('score-card');
+    let originX = window.innerWidth / 2;
+    let originY = window.innerHeight / 3;
+    
+    if (scoreCard && scoreCard.offsetParent !== null) {
+        const rect = scoreCard.getBoundingClientRect();
+        originX = rect.left + rect.width / 2;
+        originY = rect.top + rect.height / 2;
+    }
+    
+    // Create particles
+    for (let i = 0; i < particleCount; i++) {
+        const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.5;
+        const velocity = 4 + Math.random() * 4;
+        particles.push({
+            x: originX,
+            y: originY,
+            vx: Math.cos(angle) * velocity,
+            vy: Math.sin(angle) * velocity - 3,
+            radius: 2 + Math.random() * 3,
+            color: Math.random() > 0.5 ? '#000000' : '#aaaaaa',
+            alpha: 1,
+            gravity: 0.12
+        });
+    }
+    
+    let startTime = performance.now();
+    const duration = 1500;
+    
+    function animate(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = elapsed / duration;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(p => {
+            p.vy += p.gravity;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.alpha = Math.max(0, 1 - progress * 1.2);
+            
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.alpha;
+            ctx.fill();
+        });
+        
+        ctx.globalAlpha = 1;
+        
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+    
+    requestAnimationFrame(animate);
 }
 
