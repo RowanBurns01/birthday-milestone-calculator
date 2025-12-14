@@ -175,7 +175,7 @@ function formatDate(year, month, day) {
 }
 
 // Animate number counting up
-function animateNumber(element, target, duration = 1500) {
+function animateNumber(element, target, duration = 2200) {
     const start = 0;
     const startTime = performance.now();
     let confettiTriggered = false;
@@ -190,8 +190,8 @@ function animateNumber(element, target, duration = 1500) {
         
         element.textContent = current;
         
-        // Trigger confetti at 60% through animation
-        if (!confettiTriggered && progress >= 0.6 && target > 0) {
+        // Trigger confetti at 75% through animation
+        if (!confettiTriggered && progress >= 0.75 && target > 0) {
             confettiTriggered = true;
             triggerConfetti();
         }
