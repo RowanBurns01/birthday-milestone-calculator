@@ -13,9 +13,6 @@ const MONTHS = [
     'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-// Significant milestones for "best" highlighting
-const SIGNIFICANT_MILESTONES = [18, 21, 30, 40, 50];
-
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     renderCheckboxes();
@@ -178,7 +175,7 @@ function formatDate(year, month, day) {
 }
 
 // Animate number counting up
-function animateNumber(element, target, duration = 600) {
+function animateNumber(element, target, duration = 1500) {
     const start = 0;
     const startTime = performance.now();
     
@@ -186,8 +183,8 @@ function animateNumber(element, target, duration = 600) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         
-        // Ease out cubic
-        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        // Ease out quint - slower at the end
+        const easeProgress = 1 - Math.pow(1 - progress, 5);
         const current = Math.round(start + (target - start) * easeProgress);
         
         element.textContent = current;
@@ -234,19 +231,12 @@ function calculateBirthday() {
             year: milestoneYear,
             dayOfWeek,
             dayName: DAYS[dayOfWeek],
-            isPartyDay: dayOfWeek === 5 || dayOfWeek === 6,
-            isSignificant: SIGNIFICANT_MILESTONES.includes(age)
+            isPartyDay: dayOfWeek === 5 || dayOfWeek === 6
         };
     });
     
     const partyMilestones = milestoneData.filter(m => m.isPartyDay);
     const partyCount = partyMilestones.length;
-    
-    // Find the "best" milestone (most significant that lands on party day)
-    const bestMilestone = partyMilestones
-        .filter(m => m.isSignificant)
-        .sort((a, b) => SIGNIFICANT_MILESTONES.indexOf(a.age) - SIGNIFICANT_MILESTONES.indexOf(b.age))[0]
-        || partyMilestones[0];
     
     displayResults({
         birthDate: formatDate(year, month, day),
@@ -255,8 +245,7 @@ function calculateBirthday() {
         milestoneData,
         partyMilestones,
         partyCount,
-        totalMilestones: selectedMilestones.length,
-        bestMilestone
+        totalMilestones: selectedMilestones.length
     });
 }
 
@@ -277,7 +266,7 @@ function displayResults(data) {
     
     displayScoreCard(data.partyCount, data.totalMilestones);
     displayPartyMilestones(data.partyMilestones);
-    displayFullCalendar(data.milestoneData, data.bestMilestone);
+    displayFullCalendar(data.milestoneData);
     displaySummary(data);
     displayExplanation(data);
     
@@ -345,7 +334,7 @@ function displayPartyMilestones(partyMilestones) {
 }
 
 // Display full calendar
-function displayFullCalendar(milestoneData, bestMilestone) {
+function displayFullCalendar(milestoneData) {
     const list = document.getElementById('full-calendar-list');
     list.innerHTML = '';
     
@@ -353,11 +342,6 @@ function displayFullCalendar(milestoneData, bestMilestone) {
         const li = document.createElement('li');
         const dayClass = m.isPartyDay ? `day-${m.dayName.toLowerCase()}` : 
                         (m.dayOfWeek === 0 ? 'day-sunday' : 'day-weekday');
-        
-        // Highlight best milestone
-        if (bestMilestone && m.age === bestMilestone.age) {
-            li.classList.add('best-milestone');
-        }
         
         li.innerHTML = `
             <span>
@@ -419,3 +403,4 @@ function displayExplanation(data) {
     
     content.textContent = explanation;
 }
+

@@ -372,36 +372,39 @@ main {
 
 /* Share Button */
 .btn-share {
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 0.8125rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 8px 14px;
+    font-size: 0.75rem;
     background: var(--white);
-    border: 1px solid var(--gray-light);
+    border: 1px solid var(--gray-lighter);
     cursor: pointer;
     transition: all 0.2s ease;
-    color: var(--gray-dark);
+    color: var(--gray);
+}
+
+.btn-share svg {
+    flex-shrink: 0;
 }
 
 .btn-share:hover {
-    border-color: var(--dark);
+    border-color: var(--gray-light);
     color: var(--dark);
 }
 
 .share-feedback {
-    display: block;
-    text-align: center;
+    display: inline-block;
+    margin-left: 8px;
     font-size: 0.75rem;
     color: var(--gray);
-    height: 0;
-    overflow: hidden;
-    transition: all 0.2s ease;
     opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .share-feedback.show {
-    height: 20px;
     opacity: 1;
-    margin-top: -8px;
 }
 
 /* Party Milestones */
@@ -430,25 +433,6 @@ main {
 
 #party-milestones-list li:first-child, #full-calendar-list li:first-child {
     padding-top: 0;
-}
-
-/* Best milestone highlight */
-#full-calendar-list li.best-milestone {
-    background: var(--off-white);
-    margin: 0 -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    position: relative;
-}
-
-#full-calendar-list li.best-milestone::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--black);
 }
 
 .milestone-age {
@@ -588,3 +572,4 @@ footer {
         font-size: 0.75rem;
     }
 }
+
